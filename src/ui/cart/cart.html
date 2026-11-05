@@ -1,0 +1,88 @@
+<div class="drawer drawer-end relative z-50">
+  <input id="cart-drawer" [checked]="showCart()" type="checkbox" class="drawer-toggle"/>
+
+  <div class="drawer-side">
+    <label aria-label="Close cart" class="drawer-overlay"></label>
+    <aside class="h-full w-full max-w-md bg-base-100 flex flex-col shadow-xl">
+      <!-- Header -->
+      <header class="flex items-center justify-between px-5 py-4 border-b border-base-300">
+        <div class="flex items-center gap-2">
+          <h2 class="text-lg font-bold">Your cart</h2>
+          <span class="badge badge-primary badge-sm">{{ cart.cartCount() }}</span>
+        </div>
+        <button (click)="hideCart()" for="cart-drawer" class="btn btn-sm btn-circle btn-ghost"
+                aria-label="Close cart">✕
+        </button>
+      </header>
+
+      <!-- Items -->
+      <div class="flex-1 overflow-y-auto px-5">
+        <ul class="divide-y divide-base-300">
+
+          <!-- Item -->
+          @for (item of cart.cartItemsComputed(); track item.id) {
+            <li class="flex gap-4 py-4">
+              <div class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-base-200">
+                <img [ngSrc]="item.image" width="40" height="40" [alt]="item.title" class="w-full h-full object-cover"/>
+              </div>
+
+              <div class="flex-1 min-w-0 flex flex-col justify-between">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="min-w-0">
+                    <h6 class="font-medium truncate text-sm">{{ item.title }}</h6>
+                    <p class="text-sm text-base-content/60">{{ item.price | currency }}</p>
+                  </div>
+                  <button (click)="removeItem(item.id)" type="button" class="btn btn-ghost btn-sm btn-circle text-error"
+                          aria-label="Remove item">
+                    <ng-icon name="heroTrash" size="16"/>
+                  </button>
+                </div>
+
+                <div class="flex items-center justify-between mt-2">
+                  <div class="join">
+                    <button (click)="decreaseQuantity(item.id)" type="button" class="btn btn-xs join-item"
+                            aria-label="Decrease quantity">−
+                    </button>
+
+                    <span class="btn btn-xs join-item no-animation pointer-events-none min-w-8">
+                      {{ item.quantity }}
+                    </span>
+
+                    <button (click)="increaseQuantity(item.id)" type="button" class="btn btn-xs join-item"
+                            aria-label="Increase quantity">+
+                    </button>
+                  </div>
+                  <p class="font-semibold">{{ (item.price * item.quantity) | currency }}</p>
+                </div>
+              </div>
+            </li>
+          } @empty {
+            <div class="flex flex-col items-center justify-center text-center gap-4 py-16 px-6">
+              <span class="text-gray-400"><ng-icon name="heroShoppingCart" size="80"/></span>
+              <h3 class="text-lg font-semibold">You have no items in your cart</h3>
+              <p class="text-sm text-base-content/60">Browse our products and add something you like.</p>
+              <button type="button" (click)="hideCart()" for="cart-drawer" class="btn btn-primary btn-sm mt-2">
+                Continue shopping
+              </button>
+            </div>
+          }
+        </ul>
+      </div>
+
+      <!-- Footer -->
+      @if (cart.cartCount()) {
+        <footer class="px-5 py-4 border-t border-base-300 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-base-content/70">Subtotal</span>
+            <span class="text-lg font-bold">{{ cartTotal() | currency }}</span>
+          </div>
+          <p class="text-xs text-base-content/60">Delivery fee is calculated at checkout.</p>
+          <button type="button" class="btn btn-primary w-full">Checkout</button>
+          <button (click)="hideCart()" for="cart-drawer" type="button" class="btn btn-ghost btn-sm w-full">Continue
+            shopping
+          </button>
+        </footer>
+      }
+    </aside>
+  </div>
+</div>

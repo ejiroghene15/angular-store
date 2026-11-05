@@ -1,0 +1,20 @@
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="flex-1">
+    <a class="btn btn-ghost text-xl">Simple Store</a>
+  </div>
+  <div class="flex gap-2">
+    <div class="navbar-end">
+      <button class="btn btn-ghost btn-circle" (click)="toggleCart(true)">
+        <div class="indicator">
+          <ng-icon name="heroShoppingCart" size="22"/>
+          <span class="badge badge-xs badge-primary indicator-item">{{ cartCount() }}</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--{{ showCart }}-->
+<app-cart [attr.role]="showCart" [showCart]="showCart" (toggleCart)="toggleCart($event)"/>
+
+
