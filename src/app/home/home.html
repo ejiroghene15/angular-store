@@ -1,0 +1,46 @@
+<ng-container [ngTemplateOutlet]="toastAlert"></ng-container>
+
+<div class="container mx-auto">
+  <section class="px-24 py-12">
+    <h3 class="text-[1.5em] font-bold">Products</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (product of products(); track product.id) {
+        <ng-container>
+          <div class="card bg-base-100 shadow-md overflow-hidden">
+            <!-- group = hover/focus target for the overlay -->
+            <figure class="group relative aspect-square">
+              <img [ngSrc]="product.image" priority="" width="100" height="100" [alt]="product.title"
+                   class=" object-cover"/>
+
+              <div class="absolute inset-0 flex items-end justify-center p-4 bg-black/40
+                        opacity-0 group-hover:opacity-100
+                        [@media(hover:none)]:opacity-100 transition-opacity duration-200">
+                <!--                @if (productInCart()(product)) {-->
+                <!--                  <p class="text-white">In Cart</p>-->
+                <!--                } @else {-->
+                <button class="btn btn-primary w-full" (click)="addToCart(product.id)">
+                  Add to cart
+                </button>
+                <!--                }-->
+              </div>
+            </figure>
+
+            <div class="card-body p-4 gap-1">
+              <p class="text-xs text-base-content/60">{{ product.category | titlecase }}</p>
+              <h2 class="card-title text-base">{{ product.title }}</h2>
+              <p class="font-semibold">{{ product.price | currency }}</p>
+            </div>
+          </div>
+        </ng-container>
+      }
+    </div>
+  </section>
+</div>
+
+<ng-template #toastAlert>
+  @if (toastMsg()) {
+    <div class="toast toast-top toast-center z-50">
+      <div class="alert alert-success animate-toast-in">{{ toastMsg() }}</div>
+    </div>
+  }
+</ng-template>
