@@ -3,11 +3,13 @@ import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroShoppingCart} from '@ng-icons/heroicons/outline';
 import {ProductStore} from '../../service/product-store';
 import {Cart} from '../cart/cart';
+import {RouterLink} from '@angular/router';
 
 @Component({
   imports: [
     NgIcon,
-    Cart
+    Cart,
+    RouterLink
   ],
   providers: [provideIcons({heroShoppingCart})],
   selector: 'app-navbar',

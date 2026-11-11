@@ -1,8 +1,14 @@
 <div class="navbar bg-base-100 shadow-sm">
-  <div class="flex-1">
+  <div class="flex-">
     <a class="btn btn-ghost text-xl">Simple Store</a>
   </div>
-  <div class="flex gap-2">
+  <ul class="menu menu-horizontal">
+    <li><a routerLink="">Home</a></li>
+    <li><a routerLink="/forms">Forms</a></li>
+    <li><a routerLink="/settings/security">Settings</a></li>
+  </ul>
+
+  <div class="flex gap-2 ms-auto">
     <div class="navbar-end">
       <button class="btn btn-ghost btn-circle" (click)="toggleCart(true)">
         <div class="indicator">

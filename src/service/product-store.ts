@@ -20,6 +20,7 @@ export class ProductStore {
   private http = inject(HttpClient);
 
   allProducts = this.http.get<Product[]>('https://fakestoreapi.com/products');
+  _localstorage = signal<string | null>(localStorage.getItem('cartItems'))
 
   cartItems = signal<Product[]>(this.getCartItems());
   cartItemsComputed = computed(() => this.cartItems());
@@ -27,12 +28,12 @@ export class ProductStore {
     .reduce((count, item) => count + item.quantity, 0));
 
   constructor() {
-    window.addEventListener('storage', () => this.refreshCart());
-    window.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        this.refreshCart();
-      }
-    });
+    // window.addEventListener('storage', () => this.refreshCart());
+    // window.addEventListener('visibilitychange', () => {
+    //   if (document.visibilityState === 'visible') {
+    //     this.refreshCart();
+    //   }
+    // });
   }
 
   refreshCart() {
