@@ -11,17 +11,12 @@
             <figure class="group relative aspect-square">
               <img [ngSrc]="product.image" priority="" width="100" height="100" [alt]="product.title"
                    class=" object-cover"/>
-
               <div class="absolute inset-0 flex items-end justify-center p-4 bg-black/40
                         opacity-0 group-hover:opacity-100
                         [@media(hover:none)]:opacity-100 transition-opacity duration-200">
-                <!--                @if (productInCart()(product)) {-->
-                <!--                  <p class="text-white">In Cart</p>-->
-                <!--                } @else {-->
                 <button class="btn btn-primary w-full" (click)="addToCart(product.id)">
                   Add to cart
                 </button>
-                <!--                }-->
               </div>
             </figure>
 

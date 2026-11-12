@@ -1,5 +1,6 @@
 import {computed, inject, linkedSignal, Service, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {fromEvent} from 'rxjs';
 
 export type Product = {
   id: number;
@@ -19,8 +20,9 @@ export type Product = {
 export class ProductStore {
   private http = inject(HttpClient);
 
-  allProducts = this.http.get<Product[]>('https://fakestoreapi.com/products');
-  _localstorage = signal<string | null>(localStorage.getItem('cartItems'))
+  allProducts = this.http.get<Product[]>('https://fakestoreapi.com/products')
+
+  browserStorage$ = fromEvent(window, 'storage')
 
   cartItems = signal<Product[]>(this.getCartItems());
   cartItemsComputed = computed(() => this.cartItems());
@@ -28,12 +30,7 @@ export class ProductStore {
     .reduce((count, item) => count + item.quantity, 0));
 
   constructor() {
-    // window.addEventListener('storage', () => this.refreshCart());
-    // window.addEventListener('visibilitychange', () => {
-    //   if (document.visibilityState === 'visible') {
-    //     this.refreshCart();
-    //   }
-    // });
+    this.browserStorage$.subscribe(() => this.refreshCart());
   }
 
   refreshCart() {

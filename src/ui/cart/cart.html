@@ -1,6 +1,5 @@
 <div class="drawer drawer-end relative z-50">
   <input id="cart-drawer" [checked]="showCart()" type="checkbox" class="drawer-toggle"/>
-
   <div class="drawer-side">
     <label aria-label="Close cart" class="drawer-overlay"></label>
     <aside class="h-full w-full max-w-md bg-base-100 flex flex-col shadow-xl">
@@ -77,7 +76,7 @@
             <span class="text-lg font-bold">{{ cartTotal() | currency }}</span>
           </div>
           <p class="text-xs text-base-content/60">Delivery fee is calculated at checkout.</p>
-          <button type="button" class="btn btn-primary w-full">Checkout</button>
+          <a routerLink="/checkout" (click)="hideCart()" type="button" class="btn btn-primary w-full">Checkout</a>
           <button (click)="hideCart()" for="cart-drawer" type="button" class="btn btn-ghost btn-sm w-full">Continue
             shopping
           </button>

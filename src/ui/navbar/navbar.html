@@ -4,12 +4,12 @@
   </div>
   <ul class="menu menu-horizontal">
     <li><a routerLink="">Home</a></li>
-    <li><a routerLink="/forms">Forms</a></li>
     <li><a routerLink="/settings/security">Settings</a></li>
   </ul>
 
-  <div class="flex gap-2 ms-auto">
+  <div class="flex gap-2 ms-auto items-center">
     <div class="navbar-end">
+      <app-theme-controller class="me-3"/>
       <button class="btn btn-ghost btn-circle" (click)="toggleCart(true)">
         <div class="indicator">
           <ng-icon name="heroShoppingCart" size="22"/>
@@ -22,5 +22,3 @@
 
 <!--{{ showCart }}-->
 <app-cart [attr.role]="showCart" [showCart]="showCart" (toggleCart)="toggleCart($event)"/>
-
-
