@@ -39,6 +39,7 @@ export class OrderCompleted {
   orderId = signal(this.route.snapshot.queryParamMap.get('order_id'));
 
   constructor() {
+    localStorage.removeItem('cartItems')
     this.cart.cartItems.set([]);
   }
 
