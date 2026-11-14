@@ -1,0 +1,24 @@
+<div class="card bg-base-100 shadow-md overflow-hidden h-full flex flex-col">
+  <figure class="group relative aspect-square flex-shrink-0">
+    <img [ngSrc]="product().image" priority="" width="100" height="100" [alt]="product().title"
+         class="object-cover"/>
+    <div class="absolute inset-0 flex items-end justify-center p-4 bg-black/40
+                    opacity-0 group-hover:opacity-100
+                    [@media(hover:none)]:opacity-100 transition-opacity duration-200">
+      <button class="btn btn-primary w-full" (click)="addToCart.emit(product().id)">
+        Add to cart
+      </button>
+    </div>
+  </figure>
+
+  <div class="card-body p-4 gap-1 flex flex-col flex-grow">
+    <p class="text-xs text-base-content/60">{{ product().category | titlecase }}</p>
+    <h2 class="card-title text-sm line-clamp-2">{{ product().title }}</h2>
+    <div class="flex items-center justify-between mt-4">
+      <p class="font-semibold text-primary">{{ product().price | currency }}</p>
+      <button class="btn btn-circle btn-sm btn-primary" (click)="addToCart.emit(product().id)">
+        <ng-icon name="heroShoppingCart" size="16"></ng-icon>
+      </button>
+    </div>
+  </div>
+</div>

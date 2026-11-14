@@ -2,33 +2,20 @@
 
 <div class="container mx-auto">
   <section class="px-24 py-12">
-    <h3 class="text-[1.5em] font-bold">Products</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      @for (product of products(); track product.id) {
-        <ng-container>
-          <div class="card bg-base-100 shadow-md overflow-hidden">
-            <!-- group = hover/focus target for the overlay -->
-            <figure class="group relative aspect-square">
-              <img [ngSrc]="product.image" priority="" width="100" height="100" [alt]="product.title"
-                   class=" object-cover"/>
-              <div class="absolute inset-0 flex items-end justify-center p-4 bg-black/40
-                        opacity-0 group-hover:opacity-100
-                        [@media(hover:none)]:opacity-100 transition-opacity duration-200">
-                <button class="btn btn-primary w-full" (click)="addToCart(product.id)">
-                  Add to cart
-                </button>
-              </div>
-            </figure>
-
-            <div class="card-body p-4 gap-1">
-              <p class="text-xs text-base-content/60">{{ product.category | titlecase }}</p>
-              <h2 class="card-title text-base">{{ product.title }}</h2>
-              <p class="font-semibold">{{ product.price | currency }}</p>
-            </div>
-          </div>
-        </ng-container>
-      }
-    </div>
+    <h3 class="text-[1.5em] font-bold mb-5">Products</h3>
+    @defer (when productsResource.hasValue()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" animate.enter="fade-in">
+        @for (product of products(); track product.id) {
+          <app-product-card [product]="product" (addToCart)="addToCart($any($event))" />
+        }
+      </div>
+    } @placeholder {
+      <app-product-skeleton />
+    } @loading (after 300ms) {
+      <app-product-skeleton />
+    } @error {
+      <p role="alert" class="text-error">Failed to load products. Please try again later.</p>
+    }
   </section>
 </div>
 
