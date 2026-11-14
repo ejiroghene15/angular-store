@@ -1,24 +1,40 @@
-import {Component, inject, signal} from '@angular/core';
-import {CurrencyPipe, NgOptimizedImage, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
+import {Component, computed, inject, resource, signal} from '@angular/core';
+import {NgTemplateOutlet} from "@angular/common";
 import {Product, ProductStore} from '../../service/product-store';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {firstValueFrom} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {ProductCard} from './product-card/product-card';
+import {ProductSkeleton} from './product-skeleton/product-skeleton';
 
 @Component({
   imports: [
-    CurrencyPipe,
-    NgOptimizedImage,
-    TitleCasePipe,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    ProductCard,
+    ProductSkeleton
   ],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
 })
 export class Home {
+  private http = inject(HttpClient)
   private productStore = inject(ProductStore);
-  products = toSignal(this.productStore.allProducts, {initialValue: []});
-  toastMsg = signal('');
   private toastTimer?: ReturnType<typeof setTimeout>;
+  protected productsResource = resource({
+    loader: async () => {
+      return await firstValueFrom(this.http.get<Product[]>('https://fakestoreapi.com/products'))
+    },
+    id: 'products'
+  })
+
+  toastMsg = signal('');
+
+  products = computed(() => {
+    if (this.productsResource.hasValue()) {
+      return this.productsResource.value();
+    }
+    return [];
+  })
 
   showToast(msg: string) {
     clearTimeout(this.toastTimer);

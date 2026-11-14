@@ -1,5 +1,4 @@
-import {computed, inject, linkedSignal, Service, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {computed, linkedSignal, Service, signal} from '@angular/core';
 import {fromEvent} from 'rxjs';
 
 export type Product = {
@@ -18,10 +17,6 @@ export type Product = {
 
 @Service()
 export class ProductStore {
-  private http = inject(HttpClient);
-
-  allProducts = this.http.get<Product[]>('https://fakestoreapi.com/products')
-
   browserStorage$ = fromEvent(window, 'storage')
 
   cartItems = signal<Product[]>(this.getCartItems());
