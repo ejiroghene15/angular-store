@@ -24,7 +24,35 @@ The app allows users to browse products, add items to a cart, and complete purch
 
 ## Screenshots
 
+### Home Page
+
 The home page displays a product grid with skeleton placeholders while data loads, and a clean card layout with hover-to-add interactions.
+
+<img src="screenshot/home.png" alt="Home page showing product grid" width="800" />
+
+### Shopping Cart
+
+The cart page shows selected items with quantity controls and order summary.
+
+<img src="screenshot/cart.png" alt="Shopping cart page" width="800" />
+
+### Checkout
+
+The checkout page collects shipping details with form validation using Angular Signals Forms.
+
+<img src="screenshot/checkout.png" alt="Checkout page with shipping form" width="800" />
+
+### Stripe Payment
+
+The Stripe checkout page handles secure payment processing.
+
+<img src="screenshot/checkout-stripe.png" alt="Stripe payment page" width="800" />
+
+### Order Complete
+
+The order confirmation page displays the successful purchase summary.
+
+<img src="screenshot/order-complete.png" alt="Order complete page" width="800" />
 
 ## Development server
 
