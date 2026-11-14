@@ -1,0 +1,58 @@
+import {Component, inject, signal} from '@angular/core';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {NgIcon, provideIcons} from '@ng-icons/core';
+import {heroArrowLeft, heroCheckCircle, heroShoppingBag, heroTruck} from '@ng-icons/heroicons/outline';
+import {httpResource} from '@angular/common/http';
+import {environment} from '../../environments/environment.development';
+import {CurrencyPipe} from '@angular/common';
+import {ProductStore} from '../../service/product-store';
+
+type OrderConfirmationResponse = {
+  success: boolean;
+  totalAmount: number,
+  orderDate: string,
+  items: Items[]
+}
+
+type Items = {
+  name: string
+  description: string
+  image: string
+  quantity: string
+  price: number
+}
+
+@Component({
+  imports: [
+    RouterLink,
+    NgIcon,
+    CurrencyPipe
+  ],
+  providers: [provideIcons({heroCheckCircle, heroArrowLeft, heroShoppingBag, heroTruck})],
+  selector: 'app-order-completed',
+  styleUrl: './order-completed.css',
+  templateUrl: './order-completed.html',
+})
+export class OrderCompleted {
+  private readonly route = inject(ActivatedRoute)
+  private cart = inject(ProductStore);
+  orderId = signal(this.route.snapshot.queryParamMap.get('order_id'));
+
+  constructor() {
+    this.cart.cartItems.set([]);
+  }
+
+  orderConfirmation = httpResource<OrderConfirmationResponse>(() => `${environment.BACKEND_API}/confirm-order.php?orderId=${this.orderId()}`)
+
+  orderDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  estimatedDelivery = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}

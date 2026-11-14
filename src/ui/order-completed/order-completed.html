@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-base-200/30 flex items-center justify-center px-4 py-8">
+  <div class="max-w-2xl w-full">
+
+    <!-- Success Alert -->
+    <div class="text-center mb-8">
+      <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-success/10 flex items-center justify-center">
+        <ng-icon name="heroCheckCircle" size="56" class="text-success"/>
+      </div>
+      <h1 class="text-3xl font-bold mb-2">Order Completed!</h1>
+      <p class="text-base-content/60 text-lg">Thank you for your purchase. Your order has been placed successfully.</p>
+    </div>
+
+    <!-- Order Details Card -->
+    <div class="card bg-base-100 shadow-sm border border-base-300 mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-lg mb-4">Order Details</h2>
+
+        <!-- Order Info Stats -->
+        <div class="stats shadow w-full mb-4">
+          <div class="stat">
+            <div class="stat-figure text-primary">
+              <ng-icon name="heroShoppingBag" size="32"/>
+            </div>
+            <div class="stat-title">Order Number</div>
+            <div class="stat-value text-[1.5em] text-primary">{{ orderId() }}</div>
+            <div class="stat-desc">{{ orderConfirmation.value()?.orderDate }}</div>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="divider my-4">Items</div>
+
+        <div class="overflow-x-auto">
+          @if (orderConfirmation.hasValue()) {
+            <table class="table table-sm">
+              <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (item of orderConfirmation.value().items; track item) {
+                  <tr>
+                    <td>
+                      <img [src]="item.image" [alt]="item.name"
+                           class="w-[50px] h-[50px] rounded-lg object-cover"/>
+                    </td>
+                    <td class="font-medium">{{ item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="text-primary font-semibold">{{ (item.price / 100).toFixed(2) | currency }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+
+        <div class="divider">Estimated Delivery</div>
+        <div class="stats shadow w-full">
+          <div class="stat">
+            <div class="stat-figure text-secondary">
+              <ng-icon name="heroTruck" size="32"/>
+            </div>
+            <!--            <div class="stat-title">Estimated Delivery</div>-->
+            <div class="stat-value text-[1.5em] text-secondary">{{ estimatedDelivery }}</div>
+            <div class="stat-desc">📍 Track your order for real-time updates</div>
+          </div>
+        </div>
+
+
+        <!-- Order Summary -->
+        <div class="divider my-4">Summary</div>
+
+        <div class="flex justify-between items-center">
+          <span class="text-lg font-bold">Amount Paid</span>
+          <span class="text-2xl font-bold text-primary">{{ orderConfirmation.value()?.totalAmount | currency }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="card-actions justify-center gap-4">
+      <a routerLink="/" class="btn btn-primary gap-2">
+        Back to Home
+      </a>
+      <a routerLink="/" class="btn btn-outline gap-2">
+        <ng-icon name="heroArrowLeft" size="18"/>
+        Continue Shopping
+      </a>
+    </div>
+  </div>
+</div>
