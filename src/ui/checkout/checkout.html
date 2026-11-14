@@ -1,5 +1,19 @@
 <div class="min-h-screen bg-base-200/30">
 
+  <dialog id="my_modal_1" class="modal modal-middle" #modalElem>
+    <div class="modal-box">
+      <div id="stripeCheckoutComponent">
+        <!-- Checkout will insert the payment form here -->
+      </div>
+      <div class="modal-action">
+        <form method="dialog">
+          <!-- if there is a button in form, it will close the modal -->
+          <button class="btn">Close</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Header -->
   <div class="bg-base-100 border-b border-base-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -17,19 +31,15 @@
     </div>
   </div>
 
-  @if (!orderComplete) {
-    @if (cartItems().length === 0) {
-      <!-- Empty Cart State -->
-      <ng-container *ngTemplateOutlet="cartEmpty"/>
-    } @else {
-      <!-- Checkout Form Layout -->
-      <ng-container *ngTemplateOutlet="checkoutForm"/>
-    }
+  @if (cartItems().length === 0) {
+    <!-- Empty Cart State -->
+    <ng-container *ngTemplateOutlet="cartEmpty"/>
   } @else {
-    <!-- Order Complete State -->
-    <ng-container *ngTemplateOutlet="orderCompleted"/>
+    <!-- Checkout Form Layout -->
+    <ng-container *ngTemplateOutlet="checkoutForm"/>
   }
 
+  <!-- Empty Cart Template -->
   <ng-template #cartEmpty>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="max-w-md mx-auto text-center">
@@ -43,8 +53,14 @@
     </div>
   </ng-template>
 
+  <!-- Checkout Form Template -->
   <ng-template #checkoutForm>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      @if (shippingForm().errors().length) {
+        <div role="alert" class="alert alert-error alert-soft mb-4">
+          <span>{{ shippingForm().errors()[0]?.message }}</span>
+        </div>
+      }
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
         <!-- Left Column: Forms -->
@@ -62,61 +78,58 @@
 
               <form [formRoot]="shippingForm">
                 <div class="grid grid-cols-2 gap-4 mt-4">
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium">First name</span></label>
+                  <fieldset class="fieldsset">
+                    <legend class="fieldset-legend"><span class="text-red-500">*</span> First name</legend>
                     <input type="text" [formField]="shippingForm.firstName" placeholder="John"
-                           class="input input-bordered"/>
-
+                           class="input  w-full"/>
                     <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.firstName()}"/>
-
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium">Last name</span></label>
+                  </fieldset>
+                  <fieldset class="fieldsset">
+                    <legend class="fieldset-legend">Last name</legend>
                     <input type="text" [formField]="shippingForm.lastName" placeholder="Doe"
-                           class="input input-bordered"/>
-                  </div>
+                           class="input input-bordered w-full"/>
+                  </fieldset>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mt-4">
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium">Email</span></label>
+                  <fieldset class="fieldsset">
+                    <legend class="fieldset-legend"><span class="text-red-500">*</span> Email</legend>
                     <input type="email" [formField]="shippingForm.email" placeholder="john@example.com"
-                           class="input input-bordered"/>
+                           class="input input-bordered w-full"/>
                     <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.email()}"/>
-                  </div>
-                  <div class="form-control">
-                    <label class="label"><span class="label-text font-medium">Phone</span></label>
+                  </fieldset>
+                  <fieldset class="fieldsset">
+                    <legend class="fieldset-legend">Phone</legend>
                     <input type="tel" [formField]="shippingForm.phone" placeholder="+1 (555) 000-0000"
-                           class="input input-bordered"/>
+                           class="input input-bordered w-full"/>
                     <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.phone()}"/>
-                  </div>
+                  </fieldset>
                 </div>
 
-                <div class="form-control mt-4">
-                  <label class="label">
-                    <span class="label-text font-medium">Street address</span></label>
+                <fieldset class="fieldsset mt-4">
+                  <legend class="fieldset-legend"><span class="text-red-500">*</span> Street address</legend>
                   <input type="text" [formField]="shippingForm.address" placeholder="123 Main Street, Apt 4B"
                          class="input input-bordered w-full"/>
                   <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.address()}"/>
-                </div>
+                </fieldset>
 
                 <div class="grid grid-cols-6 gap-4 mt-4">
-                  <div class="col-span-2 form-control">
-                    <label class="label"><span class="label-text font-medium">City</span></label>
+                  <fieldset class="col-span-2 fieldsset">
+                    <legend class="fieldset-legend"><span class="text-red-500">*</span> City</legend>
                     <input type="text" [formField]="shippingForm.city" placeholder="New York"
                            class="input input-bordered"/>
                     <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.city()}"/>
-                  </div>
-                  <div class="col-span-2 form-control">
-                    <label class="label"><span class="label-text font-medium">State</span></label>
+                  </fieldset>
+                  <fieldset class="col-span-2 fieldsset">
+                    <legend class="fieldset-legend"><span class="text-red-500">*</span> State</legend>
                     <input type="text" [formField]="shippingForm.state" placeholder="NY" class="input input-bordered"/>
                     <ng-container *ngTemplateOutlet="formError; context: {field:shippingForm.state()}"/>
-                  </div>
-                  <div class="col-span-2 form-control">
-                    <label class="label"><span class="label-text font-medium">ZIP code</span></label>
+                  </fieldset>
+                  <fieldset class="col-span-2 fieldsset">
+                    <legend class="fieldset-legend">ZIP code</legend>
                     <input type="text" [formField]="shippingForm.zipcode" placeholder="10001"
                            class="input input-bordered"/>
-                  </div>
+                  </fieldset>
                 </div>
 
                 <!-- Confirmation Checkbox -->
@@ -230,32 +243,7 @@
     </div>
   </ng-template>
 
-  <ng-template #orderCompleted>
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <div class="card bg-base-100 shadow-sm border border-base-300">
-        <div class="card-body items-center text-center py-16">
-          <div class="w-24 h-24 rounded-full bg-success/10 flex items-center justify-center mb-6">
-            <ng-icon name="heroCheckCircle" size="56" class="text-success"/>
-          </div>
-          <h2 class="text-3xl font-bold mb-2">Order Placed!</h2>
-          <p class="text-base-content/60 mb-2">Thank you for your purchase.</p>
-          <p class="text-sm text-base-content/40 mb-8">Order confirmation has been sent to your email.</p>
-
-          <div class="stats bg-base-200 shadow-inner w-full max-w-sm mb-8">
-            <div class="stat place-items-center">
-              <div class="stat-title">Order Number</div>
-              <div class="stat-value text-lg">{{ orderNumber }}</div>
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary btn-lg" (click)="continueShopping()">
-            Continue Shopping
-          </button>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-
+  <!-- Form Error Template -->
   <ng-template #formError let-field="field">
     @if (field?.touched() && field?.invalid()) {
       <small class="text-red-500">
@@ -263,4 +251,5 @@
       </small>
     }
   </ng-template>
+
 </div>

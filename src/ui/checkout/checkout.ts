@@ -1,10 +1,20 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, ElementRef, inject, signal, viewChild} from '@angular/core';
 import {ProductStore} from '../../service/product-store';
 import {CurrencyPipe, NgOptimizedImage, NgTemplateOutlet} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroArrowLeft, heroCheckCircle, heroCreditCard, heroShoppingBag, heroTruck} from '@ng-icons/heroicons/outline';
 import {email, form, FormField, FormRoot, required, submit, validate} from '@angular/forms/signals';
+import {HttpClient} from '@angular/common/http';
+import {loadStripe} from '@stripe/stripe-js';
+import {firstValueFrom} from 'rxjs';
+import {environment} from '../../environments/environment.development';
+
+interface IClientSecret {
+  success: boolean
+  clientSecret: string
+  message: string
+}
 
 @Component({
   imports: [
@@ -23,7 +33,10 @@ import {email, form, FormField, FormRoot, required, submit, validate} from '@ang
 })
 export class Checkout {
   cart = inject(ProductStore);
-  private router = inject(Router);
+  private http = inject(HttpClient);
+  modal = viewChild<ElementRef>('modalElem');
+  checkoutModal = computed(() => this.modal()?.nativeElement);
+  private clientSecret = signal<string>('')
 
   shippingModel = signal({
     firstName: '',
@@ -38,20 +51,14 @@ export class Checkout {
   });
 
   shipping = 4.99;
-  orderComplete = false;
-  orderNumber = '';
-  confirmed = false;
 
   subtotal = computed(() =>
     this.cart.cartItems().reduce((sum, item) => sum + item.price * item.quantity, 0)
   );
 
   total = computed(() => this.subtotal() + this.shipping);
-
   cartItems = computed(() => this.cart.cartItems());
-  itemCount = computed(() =>
-    this.cart.cartItems().reduce((count, item) => count + item.quantity, 0)
-  );
+  itemCount = this.cart.cartCount
 
   shippingForm = form(
     this.shippingModel,
@@ -74,31 +81,69 @@ export class Checkout {
     },
     {
       submission: {
-        action: async (field) => {
-          // console.log(field().value())
-        }
+        action: async (field) => this.handleSubmit(field)
       }
     }
   )
 
+  private async handleSubmit(field: any) {
+    const result = await this.initGateway(field().value())
+    if (result) return await this.loadCheckOut()
+    return {kind: 'gateway-error', message: 'Unable to initiate payment'};
+  }
+
   protected async placeOrder() {
+    await submit(this.shippingForm, (field) => this.handleSubmit(field))
+  }
 
-    const success = await submit(this.shippingForm, async (field) => {
-      const result = {ok: true};
-      if (result.ok) return;
-      return {kind: 'gateway-error', message: 'Unable to initiate payment'};
-    })
+  private async loadCheckOut() {
+    const stripe = await loadStripe(environment.stripePublicKey);
 
-    if (success) {
-      // this.orderComplete = true;
-      // this.orderNumber = `#ORD-${Math.floor(Math.random() * 90000 + 10000)}`;
-      // // Clear cart
-      localStorage.removeItem('cartItems');
-      this.cart.cartItems.set([]);
+    try {
+      let checkout = stripe?.initCheckoutFormSdk({
+        clientSecret: `${this.clientSecret()}`,
+        defaultValues: {
+          email: this.shippingModel().email
+        }
+      })
+
+      let form = checkout?.createForm();
+
+      form?.mount('#stripeCheckoutComponent')
+
+      const loadActionsResult = await checkout?.loadActions();
+      if (loadActionsResult?.type === 'success') {
+        form?.on('confirm', (event) => {
+          try {
+            loadActionsResult.actions.confirm({formConfirmEvent: event});
+            // this.checkoutModal().close()
+          } catch (error) {
+            console.error("Payment confirmation error:", error)
+          }
+        });
+      }
+
+      this.checkoutModal().showModal()
+    } catch (error) {
+      console.error(error)
     }
   }
 
-  protected async continueShopping() {
-    await this.router.navigate(['/']);
+  private async initGateway(payload: object) {
+    payload = {...payload, items: this.cartItems()}
+
+    try {
+      const res = await firstValueFrom(this.http.post<Partial<IClientSecret>>(`${environment.BACKEND_API}/create-session.php`, payload))
+
+      if (res.clientSecret != null) {
+        this.clientSecret.set(res.clientSecret)
+        return true
+      }
+
+      throw new Error('Unable to initialize gateway session')
+    } catch (error) {
+      console.error(error)
+      return false
+    }
   }
 }

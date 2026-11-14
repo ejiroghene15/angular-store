@@ -4,6 +4,7 @@ import {Settings} from './settings/settings';
 import {Profile} from './profile/profile';
 import {Security} from './security/security';
 import {Checkout} from '../ui/checkout/checkout';
+import {OrderCompleted} from '../ui/order-completed/order-completed';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,9 @@ export const routes: Routes = [
   },
   {
     path: 'checkout', component: Checkout, title: 'Checkout'
+  },
+  {
+    path: 'order-completed', component: OrderCompleted, title: 'Order Completed'
   },
   {
     path: 'settings', component: Settings, title: 'Settings', children: [
