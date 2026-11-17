@@ -1,10 +1,11 @@
-import {Component, computed, inject, resource, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, resource, signal} from '@angular/core';
 import {NgTemplateOutlet} from "@angular/common";
 import {Product, ProductStore} from '../../service/product-store';
-import {firstValueFrom} from 'rxjs';
+import {firstValueFrom, interval} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ProductCard} from './product-card/product-card';
 import {ProductSkeleton} from './product-skeleton/product-skeleton';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
@@ -36,6 +37,7 @@ export class Home {
     return [];
   })
 
+
   showToast(msg: string) {
     clearTimeout(this.toastTimer);
     this.toastMsg.set(msg);
@@ -49,4 +51,7 @@ export class Home {
       if (added) this.showToast('Added to cart')
     }
   }
+
+
+
 }

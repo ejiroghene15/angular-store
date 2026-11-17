@@ -1,10 +1,10 @@
 import {Component, inject, signal} from '@angular/core';
+import {CurrencyPipe} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroArrowLeft, heroCheckCircle, heroShoppingBag, heroTruck} from '@ng-icons/heroicons/outline';
 import {httpResource} from '@angular/common/http';
 import {environment} from '../../environments/environment.development';
-import {CurrencyPipe} from '@angular/common';
 import {ProductStore} from '../../service/product-store';
 
 type OrderConfirmationResponse = {
@@ -39,17 +39,12 @@ export class OrderCompleted {
   orderId = signal(this.route.snapshot.queryParamMap.get('order_id'));
 
   constructor() {
-    localStorage.removeItem('cartItems')
+    localStorage.removeItem('cartItems');
     this.cart.cartItems.set([]);
   }
 
   orderConfirmation = httpResource<OrderConfirmationResponse>(() => `${environment.BACKEND_API}/confirm-order.php?orderId=${this.orderId()}`)
 
-  orderDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
 
   estimatedDelivery = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
     year: 'numeric',
