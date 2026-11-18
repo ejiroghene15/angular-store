@@ -45,7 +45,7 @@
                 @for (item of orderConfirmation.value().items; track item) {
                   <tr>
                     <td>
-                      <img [ngSrc]="item.image" fill="" [alt]="item.name"
+                      <img [src]="item.image"  [alt]="item.name"
                            class="w-12.5 h-12.5 rounded-lg object-cover"/>
                     </td>
                     <td class="font-medium">{{ item.name }}</td>
