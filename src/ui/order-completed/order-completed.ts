@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import {CurrencyPipe, NgOptimizedImage} from '@angular/common';
+import {CurrencyPipe} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroArrowLeft, heroCheckCircle, heroShoppingBag, heroTruck} from '@ng-icons/heroicons/outline';
@@ -26,8 +26,7 @@ type Items = {
   imports: [
     RouterLink,
     NgIcon,
-    CurrencyPipe,
-    NgOptimizedImage
+    CurrencyPipe
   ],
   providers: [provideIcons({heroCheckCircle, heroArrowLeft, heroShoppingBag, heroTruck})],
   selector: 'app-order-completed',
