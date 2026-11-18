@@ -1,11 +1,30 @@
 <div class="navbar bg-base-100 shadow-sm">
-  <div class="flex-">
+  <div class="navbar-start">
     <a class="btn btn-ghost text-xl">Simple Store</a>
+
+    <ul class="menu menu-horizontal">
+      <li><a routerLink="">Home</a></li>
+    </ul>
+
+    <button class="btn sm:hidden" popovertarget="categories-megamenu">Categories</button>
+    <div class="megamenu max-sm:megamenu-vertical megamenu-wide w-full" id="categories-megamenu" popover>
+      <span class="megamenu-active"></span>
+      <button popovertarget="all-categories">Categories</button>
+      <div id="all-categories" popover class="w-fit">
+        <ul class="menu grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          @for (category of categories(); track category) {
+            <li>
+              <a [routerLink]="['/product', category]">
+                {{ formatCategory(category) | titlecase }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
   </div>
-  <ul class="menu menu-horizontal">
-    <li><a routerLink="">Home</a></li>
-<!--    <li><a routerLink="/settings/security">Settings</a></li>-->
-  </ul>
+
 
   <div class="flex gap-2 ms-auto items-center">
     <div class="navbar-end">

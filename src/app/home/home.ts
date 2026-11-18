@@ -1,11 +1,11 @@
-import {Component, computed, inject, linkedSignal, resource, signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {NgTemplateOutlet} from "@angular/common";
-import {Product, ProductStore} from '../../service/product-store';
-import {firstValueFrom, interval} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {CartStore} from '../../service/cart-store';
 import {ProductCard} from './product-card/product-card';
 import {ProductSkeleton} from './product-skeleton/product-skeleton';
+import {Products} from '../../service/products';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {IProducts} from '../../types/product-type';
 
 @Component({
   imports: [
@@ -18,40 +18,11 @@ import {toSignal} from '@angular/core/rxjs-interop';
   templateUrl: './home.html',
 })
 export class Home {
-  private http = inject(HttpClient)
-  private productStore = inject(ProductStore);
-  private toastTimer?: ReturnType<typeof setTimeout>;
-  protected productsResource = resource({
-    loader: async () => {
-      return await firstValueFrom(this.http.get<Product[]>('https://fakestoreapi.com/products'))
-    },
-    id: 'products'
-  })
+  private productApi = inject(Products)
+  private cartStorage = inject(CartStore);
+  _cartStore = this.cartStorage;
 
-  toastMsg = signal('');
-
-  products = computed(() => {
-    if (this.productsResource.hasValue()) {
-      return this.productsResource.value();
-    }
-    return [];
-  })
-
-
-  showToast(msg: string) {
-    clearTimeout(this.toastTimer);
-    this.toastMsg.set(msg);
-    this.toastTimer = setTimeout(() => this.toastMsg.set(''), 2000);
-  }
-
-  addToCart(productId: number) {
-    const product = this.products().find((product: Product) => product.id === productId);
-    if (product) {
-      const added = this.productStore.addToCart(product);
-      if (added) this.showToast('Added to cart')
-    }
-  }
-
-
+  readonly productsResource = toSignal<IProducts>(this.productApi.getAllProducts(), {initialValue: null})
+  products = computed(() => this.productsResource()?.products ?? [])
 
 }

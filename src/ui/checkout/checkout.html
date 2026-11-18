@@ -32,14 +32,14 @@
   </div>
 
   @if (cartItems().length === 0) {
-    <!-- Empty Cart State -->
+    <!-- Empty CartStore State -->
     <ng-container *ngTemplateOutlet="cartEmpty"/>
   } @else {
     <!-- Checkout Form Layout -->
     <ng-container *ngTemplateOutlet="checkoutForm"/>
   }
 
-  <!-- Empty Cart Template -->
+  <!-- Empty CartStore Template -->
   <ng-template #cartEmpty>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="max-w-md mx-auto text-center">
@@ -163,13 +163,13 @@
               <div class="card-body">
                 <h2 class="card-title text-lg mb-4">Order Summary</h2>
 
-                <!-- Cart Items -->
+                <!-- CartStore Items -->
                 <div class="space-y-4 max-h-80 overflow-y-auto pr-2">
                   @for (item of cartItems(); track item.id) {
                     <div class="flex gap-3">
                       <div
                         class="w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden bg-base-200 shrink-0 relative">
-                        <img [ngSrc]="item.image" height="50" width="50" [alt]="item.title"/>
+                        <img [ngSrc]="item.thumbnail" height="50" width="50" [alt]="item.title"/>
                       </div>
                       <div class="flex-1 min-w-0">
                         <h4 class="text-sm font-medium truncate">{{ item.title }}</h4>

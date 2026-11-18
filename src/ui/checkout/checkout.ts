@@ -1,5 +1,5 @@
 import {Component, computed, ElementRef, inject, signal, viewChild} from '@angular/core';
-import {ProductStore} from '../../service/product-store';
+import {CartStore} from '../../service/cart-store';
 import {CurrencyPipe, NgOptimizedImage, NgTemplateOutlet} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
@@ -8,7 +8,7 @@ import {email, form, FormField, FormRoot, required, submit, validate} from '@ang
 import {HttpClient} from '@angular/common/http';
 import {loadStripe} from '@stripe/stripe-js';
 import {firstValueFrom} from 'rxjs';
-import {environment} from '../../environments/environment.development';
+import {environment} from '../../environments/environment';
 
 interface IClientSecret {
   success: boolean
@@ -32,7 +32,7 @@ interface IClientSecret {
   templateUrl: './checkout.html',
 })
 export class Checkout {
-  cart = inject(ProductStore);
+  cart = inject(CartStore);
   private http = inject(HttpClient);
   modal = viewChild<ElementRef>('modalElem');
   checkoutModal = computed(() => this.modal()?.nativeElement);

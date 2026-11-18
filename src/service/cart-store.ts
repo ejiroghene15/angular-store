@@ -1,22 +1,14 @@
-import {computed, linkedSignal, Service, signal} from '@angular/core';
+import {computed, inject, linkedSignal, Service, signal} from '@angular/core';
 import {fromEvent} from 'rxjs';
-
-export type Product = {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
-  }
-  quantity: number
-}
+import {Product} from '../types/product-type';
+import {Router} from '@angular/router';
 
 @Service()
-export class ProductStore {
+export class CartStore {
+  private router = inject(Router)
+  toastMsg = signal('');
+  private toastTimer?: ReturnType<typeof setTimeout>;
+
   browserStorage$ = fromEvent(window, 'storage')
 
   cartItems = signal<Product[]>(this.getCartItems());
@@ -53,7 +45,8 @@ export class ProductStore {
 
     localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
     this.cartItems.set(this.getCartItems());
-    return true;
+    this.showToast('Added to cart')
+    this.router.navigate(['/checkout'])
   }
 
   getCartItems(): Product[] {
@@ -65,4 +58,11 @@ export class ProductStore {
     localStorage.setItem('cartItems', JSON.stringify(this.cartItemsComputed()));
     this.cartItems.set(this.getCartItems());
   }
+
+  showToast(msg: string) {
+    clearTimeout(this.toastTimer);
+    this.toastMsg.set(msg);
+    this.toastTimer = setTimeout(() => this.toastMsg.set(''), 2000);
+  }
+
 }

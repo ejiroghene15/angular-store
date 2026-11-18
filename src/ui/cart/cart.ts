@@ -1,5 +1,5 @@
 import {Component, computed, inject, input, output} from '@angular/core';
-import {ProductStore} from '../../service/product-store';
+import {CartStore} from '../../service/cart-store';
 import {CurrencyPipe, NgOptimizedImage} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
@@ -18,7 +18,7 @@ import {heroShoppingCart, heroTrash} from '@ng-icons/heroicons/outline';
   templateUrl: './cart.html',
 })
 export class Cart {
-  cart = inject(ProductStore)
+  cart = inject(CartStore)
 
   cartTotal = computed(() => this.cart.cartItems()
     .reduce((count, item) => count + (item.quantity * item.price), 0));

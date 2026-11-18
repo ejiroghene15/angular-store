@@ -7,7 +7,7 @@ The app allows users to browse products, add items to a cart, and complete purch
 ## Features
 
 - **Product Browsing** — Fetches products from the FakeStore API and displays them in a responsive grid with skeleton loading states using Angular's `@defer` for code splitting.
-- **Shopping Cart** — Add products to the cart with real-time quantity management and toast notifications.
+- **Shopping CartStore** — Add products to the cart with real-time quantity management and toast notifications.
 - **Checkout with Stripe** — Complete orders with shipping details validation using Angular Signals Forms and payment processing via Stripe Checkout.
 - **Settings** — User profile and security settings pages with nested routing.
 - **Theme Switching** — Toggle between light and dark themes using daisyUI theme controller.
@@ -30,7 +30,7 @@ The home page displays a product grid with skeleton placeholders while data load
 
 <img src="screenshot/home.png" alt="Home page showing product grid" width="800" />
 
-### Shopping Cart
+### Shopping CartStore
 
 The cart page shows selected items with quantity controls and order summary.
 

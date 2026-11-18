@@ -3,16 +3,16 @@
 <div class="container mx-auto">
   <section class="px-24 py-12">
     <h3 class="text-[1.5em] font-bold mb-5">Products</h3>
-    @defer (when productsResource.hasValue()) {
+    @defer (when products().length) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" animate.enter="fade-in">
         @for (product of products(); track product.id) {
-          <app-product-card [product]="product" (addToCart)="addToCart($any($event))" />
+          <app-product-card [product]="product" (addToCart)="_cartStore.addToCart($any($event))"/>
         }
       </div>
     } @placeholder {
-      <app-product-skeleton />
+      <app-product-skeleton/>
     } @loading (after 300ms) {
-      <app-product-skeleton />
+      <app-product-skeleton/>
     } @error {
       <p role="alert" class="text-error">Failed to load products. Please try again later.</p>
     }
@@ -20,9 +20,9 @@
 </div>
 
 <ng-template #toastAlert>
-  @if (toastMsg()) {
+  @if (_cartStore.toastMsg()) {
     <div class="toast toast-top toast-center z-50">
-      <div class="alert alert-success animate-toast-in">{{ toastMsg() }}</div>
+      <div class="alert alert-success animate-toast-in">{{ _cartStore.toastMsg() }}</div>
     </div>
   }
 </ng-template>

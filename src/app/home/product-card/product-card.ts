@@ -1,8 +1,8 @@
 import {Component, input, output} from '@angular/core';
-import {Product} from '../../../service/product-store';
 import {CurrencyPipe, NgOptimizedImage, TitleCasePipe} from '@angular/common';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroShoppingCart} from '@ng-icons/heroicons/outline';
+import {Product} from '../../../types/product-type';
 
 @Component({
   imports: [
@@ -19,5 +19,5 @@ import {heroShoppingCart} from '@ng-icons/heroicons/outline';
 })
 export class ProductCard {
   product = input.required<Product>();
-  addToCart = output<number>();
+  addToCart = output<Product>();
 }

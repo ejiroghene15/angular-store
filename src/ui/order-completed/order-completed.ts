@@ -1,11 +1,11 @@
 import {Component, inject, signal} from '@angular/core';
-import {CurrencyPipe} from '@angular/common';
+import {CurrencyPipe, NgOptimizedImage} from '@angular/common';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {NgIcon, provideIcons} from '@ng-icons/core';
 import {heroArrowLeft, heroCheckCircle, heroShoppingBag, heroTruck} from '@ng-icons/heroicons/outline';
 import {httpResource} from '@angular/common/http';
-import {environment} from '../../environments/environment.development';
-import {ProductStore} from '../../service/product-store';
+import {environment} from '../../environments/environment';
+import {CartStore} from '../../service/cart-store';
 
 type OrderConfirmationResponse = {
   success: boolean;
@@ -26,7 +26,8 @@ type Items = {
   imports: [
     RouterLink,
     NgIcon,
-    CurrencyPipe
+    CurrencyPipe,
+    NgOptimizedImage
   ],
   providers: [provideIcons({heroCheckCircle, heroArrowLeft, heroShoppingBag, heroTruck})],
   selector: 'app-order-completed',
@@ -35,7 +36,7 @@ type Items = {
 })
 export class OrderCompleted {
   private readonly route = inject(ActivatedRoute)
-  private cart = inject(ProductStore);
+  private cart = inject(CartStore);
   orderId = signal(this.route.snapshot.queryParamMap.get('order_id'));
 
   constructor() {
