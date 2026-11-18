@@ -1,9 +1,12 @@
 {
+  "version": 2,
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/server/server.mjs"
-    }
+    { "source": "/", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/api" }
   ],
-  "trailingSlash": false
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/basic-app/**"
+    }
+  }
 }
