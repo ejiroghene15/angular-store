@@ -29,6 +29,9 @@
   <div class="flex gap-2 ms-auto items-center">
     <div class="navbar-end">
       <app-theme-controller class="me-3"/>
+      <button class="btn btn-ghost btn-circle" (click)="searchModal.show()">
+        <ng-icon name="heroMagnifyingGlass" size="22"/>
+      </button>
       <button class="btn btn-ghost btn-circle" (click)="toggleCart(true)">
         <div class="indicator">
           <ng-icon name="heroShoppingCart" size="22"/>
@@ -41,3 +44,15 @@
 
 <!--{{ showCart }}-->
 <app-cart [attr.role]="showCart" [showCart]="showCart" (toggleCart)="toggleCart($event)"/>
+
+<dialog id="search-modal" class="modal" #searchModal>
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Search</h3>
+    <p class="py-4">
+      <input type="text" placeholder="Search..." class="input input-bordered w-full" />
+    </p>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

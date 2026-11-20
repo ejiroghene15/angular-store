@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {NgIcon, provideIcons} from '@ng-icons/core';
-import {heroShoppingCart} from '@ng-icons/heroicons/outline';
+import {heroMagnifyingGlass, heroShoppingCart} from '@ng-icons/heroicons/outline';
 import {Cart} from '../cart/cart';
 import {RouterLink} from '@angular/router';
 import {ThemeController} from '../theme-controller/theme-controller';
@@ -17,7 +17,7 @@ import {CartStore} from '../../service/cart-store';
     ThemeController,
     TitleCasePipe
   ],
-  providers: [provideIcons({heroShoppingCart})],
+  providers: [provideIcons({heroShoppingCart, heroMagnifyingGlass})],
   selector: 'app-navbar',
   styleUrl: './navbar.css',
   templateUrl: './navbar.html',
