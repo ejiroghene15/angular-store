@@ -1,0 +1,105 @@
+<ng-container [ngTemplateOutlet]="toastAlert"></ng-container>
+
+<div class="container mx-auto">
+  <section class="px-24 py-12">
+    <h3 class="text-[1.5em] font-bold mb-5">Search</h3>
+
+    <div class="flex gap-4 mb-8">
+      <input
+        type="text"
+        class="input input-bordered flex-1"
+        placeholder="Search products..."
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        (keydown.enter)="performSearch()"
+      />
+      <button class="btn btn-primary" (click)="performSearch()">Search</button>
+    </div>
+
+    <div class="flex gap-8">
+      <!-- Product Results (Left) -->
+      <div class="flex-1">
+        @if (searchResource.isLoading()) {
+          <app-product-skeleton/>
+        } @else if (searchResource.error()) {
+          <p role="alert" class="text-error">Failed to search products. Please try again later.</p>
+        } @else if (searchResults().length === 0 && searchQuery().trim()) {
+          <p class="text-base-content/60">No products found for "{{ searchQuery() }}".</p>
+        } @else if (searchResults().length > 0) {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" animate.enter="fade-in">
+            @for (product of searchResults(); track product.id) {
+              <app-product-card [product]="product" (addToCart)="_cartStore.addToCart($any($event))"/>
+            }
+          </div>
+        } @else {
+          <p class="text-base-content/60">Enter a search term to find products.</p>
+        }
+      </div>
+
+      <!-- Filters Sidebar (Right) -->
+      <div class="w-64 shrink-0">
+        <div class="sticky top-20">
+          <div class="card bg-base-200 shadow">
+            <div class="card-body p-4">
+              <h4 class="card-title text-base">Filters</h4>
+              <div class="flex flex-col gap-4">
+                <div>
+                  <label class="label">
+                    <span class="label-text">Category</span>
+                  </label>
+                  <select
+                    class="select select-bordered w-full"
+                    [value]="selectedCategory()"
+                    (change)="selectedCategory.set($any($event.target).value)"
+                  >
+                    <option value="">All Categories</option>
+                    @for (category of categories(); track category) {
+                      <option [value]="category">{{ category | titlecase }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="label">
+                    <span class="label-text">Min Price</span>
+                  </label>
+                  <input
+                    type="number"
+                    class="input input-bordered w-full"
+                    placeholder="0"
+                    [value]="minPrice()"
+                    (input)="minPrice.set($any($event.target).value)"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <div>
+                  <label class="label">
+                    <span class="label-text">Max Price</span>
+                  </label>
+                  <input
+                    type="number"
+                    class="input input-bordered w-full"
+                    placeholder="∞"
+                    [value]="maxPrice()"
+                    (input)="maxPrice.set($any($event.target).value)"
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <button class="btn btn-ghost btn-sm" (click)="clearFilters()">Clear Filters</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<ng-template #toastAlert>
+  @if (_cartStore.toastMsg()) {
+    <div class="toast toast-top toast-center z-50">
+      <div class="alert alert-success animate-toast-in">{{ _cartStore.toastMsg() }}</div>
+    </div>
+  }
+</ng-template>
