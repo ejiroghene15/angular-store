@@ -3,6 +3,7 @@ import {Home} from './home/home';
 import {Checkout} from '../ui/checkout/checkout';
 import {OrderCompleted} from '../ui/order-completed/order-completed';
 import {ProductCategory} from './product-category/product-category';
+import {Search} from './search/search';
 import {rxResource} from '@angular/core/rxjs-interop';
 import {inject} from '@angular/core';
 import {Products} from '../service/products';
@@ -13,6 +14,11 @@ export const routes: Routes = [
       {
         path: '',
         component: Home
+      },
+      {
+        path: 'search',
+        component: Search,
+        title: 'Search'
       },
       {
         path: 'product/:category',

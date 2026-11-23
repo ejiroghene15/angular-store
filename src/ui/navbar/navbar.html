@@ -48,9 +48,19 @@
 <dialog id="search-modal" class="modal" #searchModal>
   <div class="modal-box">
     <h3 class="text-lg font-bold">Search</h3>
-    <p class="py-4">
-      <input type="text" placeholder="Search..." class="input input-bordered w-full" />
-    </p>
+    <div class="py-4">
+      <form (ngSubmit)="performSearch(searchModal)" class="flex gap-2">
+        <input
+          type="text"
+          placeholder="Search products..."
+          class="input input-bordered flex-1"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+          autofocus
+        />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
   </div>
   <form method="dialog" class="modal-backdrop">
     <button>close</button>

@@ -15,4 +15,8 @@ export class Products {
   getProductByCategory(category: string) {
     return this.http.get<IProducts>(`${this.url}/products/category/${category}`)
   }
+
+  searchProducts(query: string) {
+    return this.http.get<IProducts>(`${this.url}/products/search?q=${query}`)
+  }
 }
