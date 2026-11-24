@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
   selector: 'app-product-skeleton',
   standalone: true,
   template: `
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-hidden="true">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6" aria-hidden="true">
       @for (_ of [1, 2, 3, 4, 5, 6, 7, 8]; track _) {
         <div class="card bg-base-100 shadow-md overflow-hidden">
           <div class="skeleton aspect-square"></div>

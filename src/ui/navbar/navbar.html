@@ -1,12 +1,12 @@
-<div class="navbar bg-base-100 shadow-sm">
-  <div class="navbar-start">
-    <a class="btn btn-ghost text-xl">Simple Store</a>
+<div class="navbar bg-base-100 shadow-sm flex-wrap gap-y-2">
+  <div class="navbar-start w-auto flex-1 min-w-0">
+    <a routerLink="/" class="btn btn-ghost text-base sm:text-xl px-2 sm:px-4">Simple Store</a>
 
-    <ul class="menu menu-horizontal">
+    <ul class="menu menu-horizontal hidden sm:flex">
       <li><a routerLink="">Home</a></li>
     </ul>
 
-    <button class="btn sm:hidden" popovertarget="categories-megamenu">Categories</button>
+    <button class="btn btn-sm sm:hidden" popovertarget="categories-megamenu">Categories</button>
     <div class="megamenu max-sm:megamenu-vertical megamenu-wide w-full" id="categories-megamenu" popover>
       <span class="megamenu-active"></span>
       <button popovertarget="all-categories">Categories</button>
@@ -27,7 +27,7 @@
 
 
   <div class="flex gap-2 ms-auto items-center">
-    <div class="navbar-end">
+    <div class="navbar-end w-auto">
       <app-theme-controller class="me-3"/>
       <button class="btn btn-ghost btn-circle" (click)="searchModal.show()">
         <ng-icon name="heroMagnifyingGlass" size="22"/>
@@ -53,7 +53,7 @@
         <input
           type="text"
           placeholder="Search products..."
-          class="input input-bordered flex-1"
+          class="input input-bordered min-w-0 flex-1"
           [value]="searchQuery()"
           (input)="searchQuery.set($any($event.target).value)"
           autofocus

@@ -1,1 +1,29 @@
 /* Order completed component styles */
+
+@media (max-width: 640px) {
+  .card-body {
+    padding: 1rem;
+    min-width: 0;
+  }
+
+  .stats, .stat {
+    min-width: 0;
+  }
+
+  .stat {
+    padding: 1rem;
+  }
+
+  .stat-value, .stat-desc {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-actions .btn {
+    width: 100%;
+  }
+}

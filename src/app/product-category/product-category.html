@@ -1,13 +1,13 @@
 <ng-container [ngTemplateOutlet]="toastAlert"></ng-container>
 
 <div class="container mx-auto">
-  <section class="px-24 py-12">
+  <section class="px-4 py-6 sm:px-8 lg:px-24 lg:py-12">
     <h3 class="text-[1.5em] font-bold mb-5">
       {{ productCategory().split("-").join(" ") | titlecase }}
     </h3>
 
     @defer (when products().products.length) {
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" animate.enter="fade-in">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6" animate.enter="fade-in">
         @for (product of products().products; track product.id) {
           <app-product-card [product]="product" (addToCart)="_cartStore.addToCart($any($event))"/>
         }

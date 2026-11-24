@@ -1,0 +1,19 @@
+@media (max-width: 640px) {
+  aside {
+    max-height: 100dvh;
+  }
+
+  aside > .overflow-y-auto {
+    min-height: 0;
+  }
+
+  aside footer {
+    flex-shrink: 0;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  aside .justify-between.mt-2 {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
