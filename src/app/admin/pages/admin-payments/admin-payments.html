@@ -1,0 +1,50 @@
+<section class="page-heading">
+  <div><p class="eyebrow">MONEY MOVING</p><h1>Payments</h1><p class="page-subtitle">Track transactions and keep your checkout running smoothly.</p></div>
+  <a class="btn settings-button" routerLink="/admin/payments/settings"><span>⚙</span> Payment settings</a>
+</section>
+
+<section class="payment-stats" aria-label="Payment summary">
+  <article class="card card-border payment-stat"><span>Gross volume</span><strong>$24,680.00</strong><small>↗ 12.8% from last month</small><i class="payment-stat-icon stat-green">↗</i></article>
+  <article class="card card-border payment-stat"><span>Successful payments</span><strong>1,247</strong><small>97.1% success rate</small><i class="payment-stat-icon stat-sage">✓</i></article>
+  <article class="card card-border payment-stat"><span>Refunds</span><strong>$348.00</strong><small>5 refunds this month</small><i class="payment-stat-icon stat-peach">↶</i></article>
+  <article class="card card-border payment-stat"><span>Average transaction</span><strong>$68.40</strong><small>Across all providers</small><i class="payment-stat-icon stat-blue">◉</i></article>
+</section>
+
+<section class="payment-content-grid">
+  <article class="card card-border transaction-card">
+    <div class="section-heading"><div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent transactions</h2></div><button class="btn btn-sm transaction-filter">All providers <span>⌄</span></button></div>
+    <div class="overflow-x-auto">
+      <table class="table table-sm data-table">
+        <thead><tr><th>TRANSACTION</th><th>ORDER</th><th>PAYMENT METHOD</th><th>DATE</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+        <tbody>
+          @for (transaction of transactions; track transaction.id) {
+            <tr>
+              <td class="transaction-id">{{ transaction.id }}</td><td>{{ transaction.order }}<small class="table-secondary">{{ transaction.customer }}</small></td>
+              <td><span class="provider-cell"><i [class]="'provider-mark ' + transaction.provider.toLowerCase()">{{ transaction.provider === 'Stripe' ? 'S' : transaction.provider === 'PayPal' ? 'P' : '▦' }}</i>{{ transaction.provider }}</span></td>
+              <td>{{ transaction.date }}</td><td class="amount-cell">{{ transaction.amount | currency }}</td>
+              <td><span class="badge badge-soft" [class.badge-success]="transaction.tone === 'success'" [class.badge-warning]="transaction.tone === 'warning'" [class.badge-error]="transaction.tone === 'error'">{{ transaction.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <a class="all-transactions-link" routerLink="/admin/payments">View all transactions <span>→</span></a>
+  </article>
+
+  <aside class="provider-stack">
+    <article class="card card-border providers-card">
+      <div class="section-heading"><div><p class="eyebrow">CHECKOUT</p><h2>Payment providers</h2></div><a class="provider-edit" routerLink="/admin/payments/settings" aria-label="Edit payment providers">⚙</a></div>
+      @for (provider of providers(); track provider.name) {
+        <div class="provider-row"><i [class]="'provider-mark ' + provider.style">{{ provider.icon }}</i><div><strong>{{ provider.name }}</strong><small>{{ provider.detail }}</small></div><span class="badge badge-soft" [class.badge-success]="provider.enabled" [class.badge-warning]="!provider.enabled">{{ provider.enabled ? 'Active' : 'Setup' }}</span></div>
+      }
+      <a class="manage-providers" routerLink="/admin/payments/settings">Manage providers <span>→</span></a>
+    </article>
+    <article class="payout-card">
+      <div class="payout-heading"><span>↗</span><small>NEXT PAYOUT</small></div>
+      <strong>$2,418.50</strong>
+      <p>Expected Nov 28 <span>·</span>•••• 4821</p>
+      <div class="payout-progress"><i></i></div>
+      <small class="payout-caption">Your next payout is on its way</small>
+    </article>
+  </aside>
+</section>

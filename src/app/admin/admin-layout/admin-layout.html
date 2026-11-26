@@ -1,0 +1,59 @@
+<div class="admin-shell">
+  @if (mobileNavOpen()) {
+    <button (click)="closeMobileNav()" aria-label="Close navigation" class="sidebar-backdrop"></button>
+  }
+
+  <aside [class.mobile-open]="mobileNavOpen()" class="admin-sidebar">
+    <a (click)="closeMobileNav()" aria-label="Jiro admin home" class="brand-lockup" routerLink="/admin">
+      <span class="brand-mark">J</span>
+      <span class="brand-copy"><strong>Jiro</strong><small>STORE ADMIN</small></span>
+    </a>
+
+    <nav aria-label="Admin navigation">
+      <p class="nav-caption">WORKSPACE</p>
+      <ul class="menu admin-menu w-full">
+        <li>
+          <a (click)="closeMobileNav()" routerLink="/admin/orders" routerLinkActive="menu-active">
+            <span class="nav-glyph">▤</span> Orders
+          </a>
+        </li>
+        <!--        <li><a (click)="closeMobileNav()" routerLink="/admin/payments" routerLinkActive="menu-active"><span-->
+        <!--          class="nav-glyph">◉</span> Payments</a></li>-->
+        <li><a (click)="closeMobileNav()" routerLink="/admin/crm" routerLinkActive="menu-active"><span
+          class="nav-glyph">◌</span> WhatsApp CRM <span class="whatsapp-dot"></span></a></li>
+      </ul>
+
+      <p class="nav-caption nav-caption-spaced">PREFERENCES</p>
+      <ul class="menu admin-menu">
+        <li><a (click)="closeMobileNav()" routerLink="/admin/payments/settings" routerLinkActive="menu-active"><span
+          class="nav-glyph">⚙</span> Payment settings</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="profile-link" href="mailto:alex@jiro.example">
+        <span class="profile-avatar">J</span>
+        <span class="profile-copy"><strong>Jiro</strong><small>Store owner</small></span>
+        <span class="profile-more">···</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <button (click)="mobileNavOpen.set(true)" aria-label="Open navigation" class="mobile-menu-button">☰</button>
+      <div class="topbar-context"><span>Store</span><span class="breadcrumb-slash">/</span><strong>Management</strong>
+      </div>
+      <div class="topbar-actions">
+        <a class="view-store-link" routerLink="/">View store <span>↗</span></a>
+      </div>
+    </header>
+
+    <main class="admin-page">
+      <router-outlet/>
+    </main>
+
+    <footer class="admin-footer"><span>© {{ currentYear }}
+      Jiro Goods</span><span>Made for thoughtful commerce <b>✳</b></span></footer>
+  </div>
+</div>

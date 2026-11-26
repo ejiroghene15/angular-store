@@ -1,0 +1,94 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">SAMPLE STORE DATA <span class="eyebrow-dot"></span> YOUR STORE AT A GLANCE</p>
+    <h1>Good morning, Alex <span class="greeting-spark">✳</span></h1>
+    <p class="page-subtitle">Here’s what’s happening with your store today.</p>
+  </div>
+  <a class="btn primary-action" routerLink="/admin/products"><span>＋</span> Add a product</a>
+</section>
+
+<section class="metric-grid" aria-label="Store performance">
+  <article class="card card-border metric-card">
+    <div class="metric-top"><span class="stat-title">Total revenue</span><span class="metric-icon icon-green">↗</span></div>
+    <div class="metric-value">$24,680<span class="metric-change">+12.8%</span></div>
+    <p class="metric-note">Compared to $21,875 last month</p>
+  </article>
+  <article class="card card-border metric-card">
+    <div class="metric-top"><span class="stat-title">Orders</span><span class="metric-icon icon-lilac">▤</span></div>
+    <div class="metric-value">1,284<span class="metric-change">+8.2%</span></div>
+    <p class="metric-note">Compared to 1,186 last month</p>
+  </article>
+  <article class="card card-border metric-card">
+    <div class="metric-top"><span class="stat-title">Customers</span><span class="metric-icon icon-peach">♙</span></div>
+    <div class="metric-value">842<span class="metric-change">+18.4%</span></div>
+    <p class="metric-note">Compared to 711 last month</p>
+  </article>
+  <article class="card card-border metric-card">
+    <div class="metric-top"><span class="stat-title">Average order value</span><span class="metric-icon icon-blue">↗</span></div>
+    <div class="metric-value">$68.40<span class="metric-change">+4.6%</span></div>
+    <p class="metric-note">Compared to $65.40 last month</p>
+  </article>
+</section>
+
+<section class="overview-grid">
+  <article class="card card-border dashboard-card revenue-card">
+    <div class="section-heading">
+      <div><p class="eyebrow">PERFORMANCE</p><h2>Revenue over time</h2></div>
+      <button class="btn btn-sm period-button">Last 7 days <span>⌄</span></button>
+    </div>
+    <div class="chart-summary"><strong>$8,492.00</strong><span class="chart-growth">↗ 12.8%</span><small>vs. previous week</small></div>
+    <div class="chart">
+      <div class="chart-guides"><span>$3,000</span><span>$2,000</span><span>$1,000</span><span>$0</span></div>
+      <div class="chart-bars">
+        @for (bar of weeklyRevenue; track bar.label) {
+          <div class="chart-bar-column"><div class="chart-bar" [style.height.%]="bar.value"></div><span>{{ bar.label }}</span></div>
+        }
+      </div>
+    </div>
+  </article>
+
+  <article class="card card-border dashboard-card activity-card">
+    <div class="section-heading"><div><p class="eyebrow">RIGHT NOW</p><h2>Store activity</h2></div><span class="live-indicator"><i></i> Live</span></div>
+    <div class="activity-total"><strong>18</strong><span>orders today</span></div>
+    <div class="activity-bar"><span></span></div>
+    <div class="activity-legend"><span><i class="legend-green"></i>Fulfilled <b>12</b></span><span><i class="legend-peach"></i>Processing <b>6</b></span></div>
+    <div class="activity-divider"></div>
+    <div class="activity-stat"><span>Conversion rate</span><strong>3.42% <em>+0.6%</em></strong></div>
+    <div class="activity-stat"><span>Sessions today</span><strong>526</strong></div>
+  </article>
+</section>
+
+<section class="lower-grid">
+  <article class="card card-border dashboard-card orders-card">
+    <div class="section-heading"><div><p class="eyebrow">THE LATEST</p><h2>Recent orders</h2></div><a class="text-link" routerLink="/admin/orders">View all <span>→</span></a></div>
+    <div class="overflow-x-auto">
+      <table class="table table-sm data-table">
+        <thead><tr><th>ORDER</th><th>CUSTOMER</th><th>PRODUCT</th><th>AMOUNT</th><th>STATUS</th></tr></thead>
+        <tbody>
+          @for (order of recentOrders; track order.id) {
+            <tr>
+              <td class="order-number">{{ order.id }}</td>
+              <td><span class="customer-cell"><span class="customer-avatar">{{ order.initials }}</span>{{ order.customer }}</span></td>
+              <td>{{ order.product }}</td>
+              <td class="amount-cell">{{ order.amount | currency }}</td>
+              <td><span class="badge badge-soft" [class.badge-success]="order.tone === 'success'" [class.badge-warning]="order.tone === 'warning'" [class.badge-info]="order.tone === 'info'">{{ order.status }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <article class="card card-border dashboard-card products-card">
+    <div class="section-heading"><div><p class="eyebrow">CUSTOMER FAVORITES</p><h2>Top products</h2></div><a class="text-link" routerLink="/admin/products">Inventory <span>→</span></a></div>
+    <div class="top-products-list">
+      @for (product of topProducts; track product.name; let index = $index) {
+        <div class="top-product-row">
+          <div class="product-thumb" [class.thumb-sand]="product.color === 'sand'" [class.thumb-sage]="product.color === 'sage'" [class.thumb-clay]="product.color === 'clay'">{{ index === 0 ? '✳' : index === 1 ? '◒' : '▱' }}</div>
+          <div class="top-product-copy"><strong>{{ product.name }}</strong><small>{{ product.category }}</small></div>
+          <div class="top-product-sales"><strong>{{ product.sold }}</strong><small>sold</small></div>
+        </div>
+      }
+    </div>
+  </article>
+</section>

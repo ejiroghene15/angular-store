@@ -1,0 +1,41 @@
+<section class="page-heading">
+  <div><p class="eyebrow">CHECKOUT &amp; SETTLEMENT</p><h1>Payment settings</h1><p class="page-subtitle">Choose how customers pay and manage your gateway credentials.</p></div>
+  <a class="back-link" routerLink="/admin/payments">← Back to payments</a>
+</section>
+
+<div class="settings-notice"><span>✳</span><p><strong>Preview only.</strong> Credentials are kept in memory for this session and are not sent to a payment processor or saved to browser storage.</p></div>
+
+@if (saved()) { <div class="alert alert-success saved-alert" role="status"><span>✓</span> Settings saved in this preview.</div> }
+
+<form class="gateway-form" (submit)="saveSettings(); $event.preventDefault()">
+  <section class="gateway-section-heading"><div><p class="eyebrow">AVAILABLE INTEGRATIONS</p><h2>Payment gateways</h2><p>Connect more than one gateway so customers can choose what works for them.</p></div><span class="gateway-total">3 PROVIDERS</span></section>
+
+  <article class="card card-border gateway-card">
+    <div class="gateway-card-top"><div class="gateway-brand"><span class="gateway-logo stripe-logo">S</span><div><h3>Stripe</h3><p>Cards, Apple Pay, Google Pay and more</p></div></div><label class="gateway-toggle"><span>{{ settingsForm.stripe.enabled().value() ? 'Enabled' : 'Disabled' }}</span><input class="toggle toggle-success" type="checkbox" aria-label="Enable Stripe" [formField]="settingsForm.stripe.enabled" (change)="saved.set(false)"></label></div>
+    <div class="gateway-fields">
+      <label class="field-label">Publishable key <input class="input input-bordered field-control" type="text" autocomplete="off" placeholder="pk_live_..." [formField]="settingsForm.stripe.publicKey" (input)="saved.set(false)">@if (settingsForm.stripe.publicKey().touched() && settingsForm.stripe.publicKey().errors().length) { <small class="field-error">{{ settingsForm.stripe.publicKey().errors()[0].message }}</small> }</label>
+      <label class="field-label">Secret key <input class="input input-bordered field-control" type="password" autocomplete="new-password" placeholder="Enter your Stripe secret key" [formField]="settingsForm.stripe.secretKey" (input)="saved.set(false)">@if (settingsForm.stripe.secretKey().touched() && settingsForm.stripe.secretKey().errors().length) { <small class="field-error">{{ settingsForm.stripe.secretKey().errors()[0].message }}</small> }</label>
+    </div>
+    <div class="gateway-card-bottom"><span>🔒 Your secret key is never shown after saving.</span><span class="environment-tag">TEST MODE</span></div>
+  </article>
+
+  <article class="card card-border gateway-card">
+    <div class="gateway-card-top"><div class="gateway-brand"><span class="gateway-logo paypal-logo">P</span><div><h3>PayPal</h3><p>PayPal wallet and Pay Later options</p></div></div><label class="gateway-toggle"><span>{{ settingsForm.paypal.enabled().value() ? 'Enabled' : 'Disabled' }}</span><input class="toggle toggle-success" type="checkbox" aria-label="Enable PayPal" [formField]="settingsForm.paypal.enabled" (change)="saved.set(false)"></label></div>
+    <div class="gateway-fields">
+      <label class="field-label">Client ID <input class="input input-bordered field-control" type="text" autocomplete="off" placeholder="Enter your PayPal client ID" [formField]="settingsForm.paypal.clientId" (input)="saved.set(false)">@if (settingsForm.paypal.clientId().touched() && settingsForm.paypal.clientId().errors().length) { <small class="field-error">{{ settingsForm.paypal.clientId().errors()[0].message }}</small> }</label>
+      <label class="field-label">Client secret <input class="input input-bordered field-control" type="password" autocomplete="new-password" placeholder="Enter your PayPal client secret" [formField]="settingsForm.paypal.secretKey" (input)="saved.set(false)">@if (settingsForm.paypal.secretKey().touched() && settingsForm.paypal.secretKey().errors().length) { <small class="field-error">{{ settingsForm.paypal.secretKey().errors()[0].message }}</small> }</label>
+    </div>
+    <div class="gateway-card-bottom"><span>🔒 Credentials stay in this preview session.</span><span class="environment-tag">SANDBOX</span></div>
+  </article>
+
+  <article class="card card-border gateway-card">
+    <div class="gateway-card-top"><div class="gateway-brand"><span class="gateway-logo square-logo">▦</span><div><h3>Square</h3><p>Online checkout and in-person payments</p></div></div><label class="gateway-toggle"><span>{{ settingsForm.square.enabled().value() ? 'Enabled' : 'Disabled' }}</span><input class="toggle toggle-success" type="checkbox" aria-label="Enable Square" [formField]="settingsForm.square.enabled" (change)="saved.set(false)"></label></div>
+    <div class="gateway-fields">
+      <label class="field-label">Application ID <input class="input input-bordered field-control" type="text" autocomplete="off" placeholder="Enter your Square application ID" [formField]="settingsForm.square.applicationId" (input)="saved.set(false)">@if (settingsForm.square.applicationId().touched() && settingsForm.square.applicationId().errors().length) { <small class="field-error">{{ settingsForm.square.applicationId().errors()[0].message }}</small> }</label>
+      <label class="field-label">Access token <input class="input input-bordered field-control" type="password" autocomplete="new-password" placeholder="Enter your Square access token" [formField]="settingsForm.square.accessToken" (input)="saved.set(false)">@if (settingsForm.square.accessToken().touched() && settingsForm.square.accessToken().errors().length) { <small class="field-error">{{ settingsForm.square.accessToken().errors()[0].message }}</small> }</label>
+    </div>
+    <div class="gateway-card-bottom"><span>🔒 Credentials stay in this preview session.</span><span class="environment-tag">SANDBOX</span></div>
+  </article>
+
+  <div class="settings-actions"><span>Gateway changes are only simulated in this demo.</span><button class="btn save-settings-button" type="submit" [disabled]="settingsForm().invalid()">Save settings <span>→</span></button></div>
+</form>

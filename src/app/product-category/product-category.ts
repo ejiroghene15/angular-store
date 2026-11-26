@@ -24,6 +24,9 @@ export class ProductCategory {
   _cartStore = this.cartStorage;
 
   constructor(route: ActivatedRoute) {
-    route.params.subscribe(param => this.productCategory.set(param['category']))
+    route.params.subscribe(param => {
+      const category = param['category'];
+      if (typeof category === 'string') this.productCategory.set(category);
+    })
   }
 }

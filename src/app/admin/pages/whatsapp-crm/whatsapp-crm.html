@@ -1,0 +1,87 @@
+<section class="page-heading">
+  <div><p class="eyebrow">CUSTOMER RELATIONSHIPS</p>
+    <h1>WhatsApp CRM</h1>
+    <p class="page-subtitle">Good conversations make great customers.</p></div>
+  <span class="connection-status"><i></i> Preview inbox <span>·</span> API not connected</span>
+</section>
+
+<section class="crm-workspace card card-border">
+  <aside class="contact-sidebar">
+    <div class="inbox-heading">
+      <div><h2>Inbox</h2><span class="inbox-total">{{ contacts().length }}</span></div>
+      <button aria-label="Start a new conversation" class="new-message-button">＋</button>
+    </div>
+    <label class="contact-search"><span>⌕</span><input (input)="searchQuery.set($any($event.target).value)" [value]="searchQuery()"
+                                                       aria-label="Search contacts" placeholder="Search people..."
+                                                       type="search"></label>
+    <div aria-label="Filter conversations" class="contact-filters" role="tablist">
+      @for (filter of filters; track filter) {
+        <button (click)="selectedFilter.set(filter)" [attr.aria-selected]="selectedFilter() === filter"
+                [class.active-filter]="selectedFilter() === filter"
+                role="tab">{{ filter }} @if (filter === 'Unread') {
+          <span>3</span>
+        }</button>
+      }
+    </div>
+    <div class="contact-list">
+      @for (contact of filteredContacts(); track contact.id) {
+        <button (click)="selectContact(contact.id)" [class.selected-contact]="selectedContactId() === contact.id"
+                class="contact-row">
+          <span [class.avatar-blue]="contact.color === 'blue'" [class.avatar-clay]="contact.color === 'clay'"
+                [class.avatar-lilac]="contact.color === 'lilac'" [class.avatar-sage]="contact.color === 'sage'"
+                class="contact-avatar">{{ contact.initials }}<i></i></span>
+          <span class="contact-copy"><span
+            class="contact-name-line"><strong>{{ contact.name }}</strong><small>{{ contact.time }}</small></span><span
+            class="contact-preview">{{ contact.preview }}</span><span class="contact-tags">@if (contact.vip) {
+            <small class="vip-tag">✦ VIP</small>
+          }
+            @if (contact.unread > 0) {
+              <small class="unread-tag">{{ contact.unread }} new</small>
+            }</span></span>
+        </button>
+      } @empty {
+        <p class="empty-contacts">No conversations found.</p>
+      }
+    </div>
+    <div class="inbox-footer"><span class="whatsapp-mark">◉</span><span><strong>WhatsApp Business</strong><small>Demo connection</small></span><span
+      class="footer-dot"></span></div>
+  </aside>
+
+  @if (activeContact(); as contact) {
+    <div class="conversation-panel">
+      <header class="conversation-header">
+        <span [class.avatar-blue]="contact.color === 'blue'" [class.avatar-clay]="contact.color === 'clay'"
+              [class.avatar-lilac]="contact.color === 'lilac'" [class.avatar-sage]="contact.color === 'sage'"
+              class="contact-avatar large-avatar">{{ contact.initials }}<i></i></span>
+        <div class="conversation-person"><strong>{{ contact.name }}</strong><span>{{ contact.phone }} · <i></i> WhatsApp</span>
+        </div>
+        <div class="conversation-actions">
+          <button aria-label="Search conversation">⌕</button>
+          <button aria-label="More conversation options">···</button>
+        </div>
+      </header>
+      <div class="conversation-note"><span>🔒</span> Messages are stored locally for this preview. Connect your WhatsApp
+        Business API to go live.
+      </div>
+      <div class="conversation-messages">
+        <div class="date-divider"><span>TODAY</span></div>
+        @for (message of contact.messages; track message.id) {
+          <div [class.from-store]="message.fromStore" class="message-line">
+            <div [class.store-bubble]="message.fromStore" class="chat-bubble">{{ message.body }}
+              <small>{{ message.time }} @if (message.fromStore) {
+                <span>✓✓</span>
+              }</small></div>
+          </div>
+        }
+      </div>
+      <form (submit)="sendMessage(); $event.preventDefault()" class="message-composer">
+        <button aria-label="Attach a file" class="composer-attach" type="button">＋</button>
+        <textarea [formField]="messageForm.message" aria-label="Write a message" class="textarea textarea-bordered message-input"
+                  placeholder="Write a message..." rows="1"></textarea>
+        <button [disabled]="messageForm().invalid()" aria-label="Send message" class="send-button" type="submit">↑
+        </button>
+      </form>
+      <p class="composer-hint">Press <kbd>Enter</kbd> to send <span>·</span> <kbd>Shift + Enter</kbd> for a new line</p>
+    </div>
+  }
+</section>

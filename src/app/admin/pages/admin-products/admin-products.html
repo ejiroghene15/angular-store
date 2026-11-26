@@ -1,0 +1,74 @@
+<section class="page-heading">
+  <div><p class="eyebrow">YOUR CATALOG</p><h1>Products</h1><p class="page-subtitle">Keep your shelves fresh and your inventory in check.</p></div>
+  <span class="catalog-count"><strong>{{ products().length }}</strong> products in your catalog</span>
+</section>
+
+<div class="product-layout">
+  <section class="card card-border product-form-card">
+    <div class="form-card-heading"><span class="form-heading-icon">＋</span><div><h2>Add a new product</h2><p>A good product starts with the details.</p></div></div>
+    @if (saved()) {
+      <div class="alert alert-success saved-alert" role="status"><span>✓</span> Product added to your catalog.</div>
+    }
+    <form class="product-form" (submit)="saveProduct(); $event.preventDefault()">
+      <label class="field-label">Product name <span>Required</span>
+        <input class="input input-bordered field-control" type="text" placeholder="e.g. Sunday Market Tote" [formField]="productForm.name">
+        @if (productForm.name().touched() && productForm.name().errors().length) { <small class="field-error">{{ productForm.name().errors()[0].message }}</small> }
+      </label>
+      <div class="form-row">
+        <label class="field-label">SKU <span>Required</span>
+          <input class="input input-bordered field-control" type="text" placeholder="e.g. BAG-012" [formField]="productForm.sku">
+          @if (productForm.sku().touched() && productForm.sku().errors().length) { <small class="field-error">{{ productForm.sku().errors()[0].message }}</small> }
+        </label>
+        <label class="field-label">Category
+          <select class="select select-bordered field-control" [formField]="productForm.category">
+            <option value="Home & living">Home &amp; living</option><option value="Bags & accessories">Bags &amp; accessories</option><option value="Textiles">Textiles</option><option value="Personal care">Personal care</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label class="field-label">Price <span>USD</span>
+          <div class="input input-bordered field-control input-with-prefix"><span>$</span><input type="number" step="0.01" placeholder="0.00" [formField]="productForm.price"></div>
+          @if (productForm.price().touched() && productForm.price().errors().length) { <small class="field-error">{{ productForm.price().errors()[0].message }}</small> }
+        </label>
+        <label class="field-label">Available stock
+          <input class="input input-bordered field-control" type="number" placeholder="0" [formField]="productForm.stock">
+        </label>
+      </div>
+      <label class="field-label">Description <span>Optional</span>
+        <textarea class="textarea textarea-bordered field-control description-field" placeholder="What makes this one special?" [formField]="productForm.description"></textarea>
+      </label>
+      <div class="form-actions"><span>Changes are saved to this preview only.</span><button class="btn save-button" type="submit" [disabled]="productForm().invalid()">Add product <span>→</span></button></div>
+    </form>
+  </section>
+
+  <aside class="product-aside">
+    <article class="card card-border inventory-card">
+      <div class="section-heading"><div><p class="eyebrow">INVENTORY HEALTH</p><h2>Stock overview</h2></div><span class="inventory-icon">▤</span></div>
+      <div class="inventory-number">{{ products().length }} <span>active items</span></div>
+      <div class="inventory-progress"><span></span></div>
+      <div class="inventory-legend"><span><i></i>In stock</span><strong>82%</strong></div>
+      <div class="inventory-legend low-stock-legend"><span><i></i>Running low</span><strong>3 items</strong></div>
+      <div class="inventory-legend out-stock-legend"><span><i></i>Out of stock</span><strong>1 item</strong></div>
+    </article>
+    <article class="tip-card"><span>✳</span><strong>A little tip</strong><p>Products with clear descriptions and great photos get up to 30% more love.</p></article>
+  </aside>
+</div>
+
+<section class="card card-border inventory-table-card">
+  <div class="section-heading"><div><p class="eyebrow">RECENTLY UPDATED</p><h2>Your products</h2></div><button class="btn btn-sm table-filter">All products <span>⌄</span></button></div>
+  <div class="overflow-x-auto">
+    <table class="table table-sm data-table">
+      <thead><tr><th>PRODUCT</th><th>SKU</th><th>CATEGORY</th><th>PRICE</th><th>STOCK</th><th>STATUS</th></tr></thead>
+      <tbody>
+        @for (product of products(); track product.id) {
+          <tr>
+            <td><span class="product-name-cell"><span class="product-swatch" [class.swatch-sand]="product.tone === 'sand'" [class.swatch-sage]="product.tone === 'sage'" [class.swatch-clay]="product.tone === 'clay'" [class.swatch-blue]="product.tone === 'blue'">✳</span><strong>{{ product.name }}</strong></span></td>
+            <td>{{ product.sku }}</td><td>{{ product.category }}</td><td class="price-cell">{{ product.price | currency }}</td>
+            <td>{{ product.stock }} units</td>
+            <td>@if (product.stock === 0) { <span class="badge badge-soft badge-error">Out of stock</span> } @else if (product.stock < 10) { <span class="badge badge-soft badge-warning">Low stock</span> } @else { <span class="badge badge-soft badge-success">In stock</span> }</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

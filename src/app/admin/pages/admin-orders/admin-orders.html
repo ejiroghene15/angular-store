@@ -1,0 +1,145 @@
+<section class="page-heading">
+  <div><p class="eyebrow">FULFILLMENT</p>
+    <h1>Orders</h1>
+    <p class="page-subtitle">Every order, every detail, all in one place.</p></div>
+</section>
+
+<section class="card card-border orders-table-card">
+  <div class="orders-toolbar">
+    <div><p class="eyebrow">YOUR ORDERS</p>
+      <h2>All orders <span>{{ filteredOrders().length }}</span></h2></div>
+    <div class="orders-tools"><label class="order-search"><span>⌕</span>
+      <input (input)="setSearchTerm($event)"
+             aria-label="Search orders"
+             placeholder="Search orders" type="search"></label>
+    </div>
+  </div>
+  <div aria-label="Filter orders" class="order-tabs" role="tablist">
+    @for (filter of filters; track filter) {
+      <button (click)="setFilter(filter)" [attr.aria-selected]="selectedFilter() === filter"
+              [class.active-tab]="selectedFilter() === filter"
+              role="tab"> {{ filter }}
+      </button>
+    }
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table table-sm data-table">
+      <thead>
+      <tr>
+        <th><input aria-label="Select all orders" class="checkbox select-checkbox" type="checkbox"></th>
+        <th>ORDER</th>
+        <th>CUSTOMER</th>
+        <th>DATE</th>
+        <th>ITEMS</th>
+        <th>TOTAL</th>
+        <th>STATUS</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (order of paginatedOrders(); track order.order_id) {
+          <tr>
+            <td>
+              <input [attr.aria-label]="'Select order ' + order.order_id" class="checkbox select-checkbox"
+                     type="checkbox">
+            </td>
+            <td class="order-number">#{{ order.order_id }}</td>
+            <td>
+              <span class="customer-cell">
+              <span class="customer-avatar">{{ order.initials }}</span>
+              <span class="customer-copy">
+                <strong>{{ order.customer?.name }}</strong>
+                <small>{{ order.customer?.email }}</small>
+              </span>
+            </span>
+            </td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.number_of_items }} {{ order.number_of_items === 1 ? 'item' : 'items' }}</td>
+            <td class="amount-cell">{{ order.amount | currency }}</td>
+            <td>
+              <span [class]="'badge badge-soft ' + statusClass(order.payment_status | titlecase)"
+                    class="badge badge-soft">{{ order.payment_status }}</span>
+            </td>
+            <td>
+              <button (click)="showOrderDetails(order)" [attr.aria-label]="'View details for order ' + order.order_id"
+                      class="row-more" type="button">View more
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td class="empty-orders" colspan="8">No orders match your search and filters.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="table-pagination">
+    <span>Showing <strong>{{ firstRecord() }}
+      –{{ lastRecord() }}</strong> of <strong>{{ filteredOrders().length }}</strong> orders</span>
+    <nav aria-label="Pagination" class="join">
+      <button (click)="setPage(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page"
+              class="join-item btn btn-ghost btn-xs" type="button">←
+      </button>
+      @for (page of visiblePages(); track page; let index = $index) {
+        @if (index > 0 && page > visiblePages()[index - 1] + 1) {
+          <span aria-hidden="true">…</span>
+        }
+        <button (click)="setPage(page)" [attr.aria-current]="currentPage() === page ? 'page' : null"
+                [class.current-page]="currentPage() === page" class="join-item btn btn-ghost btn-xs"
+                type="button">{{ page }}
+        </button>
+      }
+      <button (click)="setPage(currentPage() + 1)" [disabled]="currentPage() >= totalPages()" aria-label="Next page"
+              class="join-item btn btn-ghost btn-xs" type="button">→
+      </button>
+    </nav>
+  </div>
+</section>
+
+@if (selectedOrder(); as order) {
+  <button (click)="closeOrderDetails()" aria-label="Close order details" class="order-details-backdrop"
+          type="button"></button>
+  <aside aria-labelledby="order-details-title" aria-modal="true" class="order-details-panel" role="dialog">
+    <header class="order-details-header">
+      <div>
+        <p class="eyebrow">ORDER DETAILS</p>
+        <h2 id="order-details-title">Order #{{ order.order_id }}</h2>
+      </div>
+      <button (click)="closeOrderDetails()" aria-label="Close order details" class="btn btn-ghost btn-sm"
+              type="button">×
+      </button>
+    </header>
+
+    <div class="order-details-meta">
+      <div><span>Customer</span><strong>{{ order.customer?.name }}</strong><small>{{ order.customer?.email }}</small>
+      </div>
+      <div><span>Order date</span><strong>{{ order.date }}</strong></div>
+    </div>
+
+    <div class="order-details-items">
+      <h3>Items ({{ order.number_of_items }})</h3>
+      @if (order.items?.length) {
+        @for (item of order.items; track $index) {
+          <article class="order-detail-item">
+            <img [alt]="item.name" [src]="item.image"/>
+            <div class="order-detail-copy">
+              <h4>{{ item.name }}</h4>
+              @if (item.description) {
+                <p>{{ item.description }}</p>
+              }
+              <span>{{ item.price / 100 | currency }} <small>× {{ item.quantity }}</small></span>
+            </div>
+          </article>
+        }
+      } @else {
+        <p class="order-details-message">No item details are available for this order.</p>
+      }
+    </div>
+
+    <footer class="order-details-total">
+      <span>Order total</span>
+      <strong>{{ order.amount | currency }}</strong>
+    </footer>
+  </aside>
+}

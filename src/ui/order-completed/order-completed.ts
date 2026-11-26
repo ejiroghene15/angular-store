@@ -43,7 +43,10 @@ export class OrderCompleted {
     this.cart.cartItems.set([]);
   }
 
-  orderConfirmation = httpResource<OrderConfirmationResponse>(() => `${environment.BACKEND_API}/confirm-order.php?orderId=${this.orderId()}`)
+  orderConfirmation = httpResource<OrderConfirmationResponse>(() => {
+    const orderId = this.orderId();
+    return orderId ? `${environment.BACKEND_API}/confirm-order.php?orderId=${orderId}` : undefined;
+  })
 
 
   estimatedDelivery = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
